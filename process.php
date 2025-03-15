@@ -6,12 +6,11 @@
             font-family: Arial, sans-serif;
             background-color: #3D1E2D; 
             color: #F5E6E8; 
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            margin: 0;
         }
 
         .output-container {
@@ -20,25 +19,31 @@
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             width: 400px;
-            text-align: center;
+            text-align: left;
         }
 
         h2 {
             color: #F5E6E8; 
         }
 
-        pre {
+        .output-list {
             background-color: #7A3D4C; 
             padding: 10px;
             border-radius: 5px;
-            overflow-x: auto;
-            color: #F5E6E8; 
+            list-style-type: none;
+        }
+
+        .output-list li {
+            margin: 5px 0;
         }
 
         a {
             color: #A64558; 
             text-decoration: none;
             font-weight: bold;
+            display: block;
+            margin-top: 20px;
+            text-align: center;
         }
 
         a:hover {
@@ -56,9 +61,19 @@
             // Calling the Python script
             $command = escapeshellcmd("python3 network_config.py $mac_address $dhcp_version");
             $output = shell_exec($command);
-            
+
+            // Decode JSON and display as a list
+            $result = json_decode($output, true);
             echo "<h2>Assigned IP Details:</h2>";
-            echo "<pre>$output</pre>";
+            if ($result && is_array($result)) {
+                echo "<ul class='output-list'>";
+                foreach ($result as $key => $value) {
+                    echo "<li><strong>" . htmlspecialchars($key) . ":</strong> " . htmlspecialchars($value) . "</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "<p>Error processing the request. Please try again.</p>";
+            }
         } else {
             echo "<h2>Error</h2>";
             echo "<p>No data received. Please go back and submit the form.</p>";
