@@ -5,11 +5,11 @@ from ipaddress import IPv4Network, IPv6Network
 ipv4_subnet = IPv4Network("192.168.1.0/24")
 ipv6_subnet = IPv6Network("2001:db8::/64")
 
-# Lease database
+
 lease_db = {}
 
 def validate_mac(mac):
-    # Simple MAC address validation
+    # Here, I did a simple MAC address validation
     return len(mac.split(":")) == 6
 
 def generate_ipv6(mac):
@@ -42,7 +42,7 @@ def handle_request(mac, dhcp_version):
         return {"error": "No available IPs in the subnet"}
     return {"mac_address": mac, "assigned_ip": ip_info["ip"], "lease_time": f"{ip_info['lease_time']} seconds"}
 
-# Simulating user input for testing
+# This code part is for simulting a user input for testing
 if __name__ == "__main__":
     mac_address = "00:1A:2B:3C:4D:5E"
     dhcp_version = "DHCPv6"
